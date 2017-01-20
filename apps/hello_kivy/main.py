@@ -5,5 +5,9 @@ class HelloApp(App):
     pass
 
 
-if __name__ == '__main__':
+def run():
     HelloApp().run()
+
+
+if __name__ == '__main__':
+    run()
