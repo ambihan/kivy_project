@@ -6,23 +6,43 @@ from kivy.utils import get_color_from_hex
 
 from time import strftime
 
-LabelBase.register(
-    name='Roboto',
-    fn_regular='../../static/fonts/roboto/Roboto-Thin.ttf',
-    fn_bold='../../static/fonts/roboto/Roboto-Medium.ttf'
-)
-
 
 class ClockApp(App):
-    def update_time(self, seconds):
-        self.root.ids.time.text = strftime('[b]%H[/b]:%M:%S')
+    sw_started = False
+    sw_seconds = 0
 
     def on_start(self):
-        Clock.schedule_interval(self.update_time, 1)
+        Clock.schedule_interval(self.update_time, 0)
+
+    def update_time(self, seconds):
+        self.root.ids.time.text = strftime('[b]%H[/b]:%M:%S')
+        if self.sw_started:
+            self.sw_seconds += seconds
+            minutes, seconds = divmod(self.sw_seconds, 60)
+            self.root.ids.stopwatch.text = (
+                '%02d:%02d.[size=40]%02d[/size]' %
+                (int(minutes), int(seconds),
+                 int(seconds * 100 % 100)))
+
+    def start_stop(self):
+        self.root.ids.start_stop.text = 'Start' if self.sw_started else 'Stop'
+        self.sw_started = not self.sw_started
+
+    def reset(self):
+        if self.sw_started:
+            self.root.ids.start_stop.text = 'Start'
+            self.sw_started = False
+        self.sw_seconds = 0
+        self.root.ids.stopwatch.text = ('00:00.[size=40]00[/size]')
 
 
 def run():
     Window.clearcolor = get_color_from_hex('#301216')
+    LabelBase.register(
+        name='Roboto',
+        fn_regular='../../static/fonts/roboto/Roboto-Thin.ttf',
+        fn_bold='../../static/fonts/roboto/Roboto-Medium.ttf'
+    )
     ClockApp().run()
 
 

@@ -7,6 +7,7 @@
     font_name: 'Roboto'
     font_size: 25
     bold: True
+    border: (2, 2, 2, 2)
 
 BoxLayout:
     orientation: 'vertical'
@@ -21,10 +22,18 @@ BoxLayout:
         spacing: 20
         size_hint: (1, None)
         RobotoButton:
+            id: start_stop
+            on_press: app.start_stop()
             text: 'Start'
+            background_normal: '../../static/images/button/button_normal.png'
+            background_down: '../../static/images/button/button_down.png'
 
         RobotoButton:
+            id: reset
+            on_press: app.reset()
             text: 'Reset'
+            background_normal: '../../static/images/button/red_button_normal.png'
+            background_down: '../../static/images/button/red_button_down.png'
 
     Label:
         id: stopwatch
